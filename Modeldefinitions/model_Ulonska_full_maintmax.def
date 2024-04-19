@@ -1,0 +1,63 @@
+DESCRIPTION
+"Model adaptation to BI process as Fed-Batch. For the BI processes model 
+kinetics were reduced  and feeds were adapted"
+
+PREDICTOR
+t	 T	 "h"	 "time"	 0	 335	
+
+COMPARTMENTS
+reactor	 V	 "L"	 vol.	 1
+
+STATES
+VCC         C	 "10^9 cells/L"	 "conc."	 reactor	 1	 "Viable cell concentration"
+DCC         C	 "10^9 cells/L"	 "conc."	 reactor	 1	 "Death cell concentration"
+LCC         C    "10^9 cells/L"	 "conc."	 reactor	 1	 "Lysed cell concentration"   
+c_glc       C	 "g/L"           "conc."	 reactor	 1	 "Glucose concentration"
+c_lac       C	 "g/L"           "conc."	 reactor	 1	 "Lactate concentration"
+c_gln       C    "g/L"           "conc."	 reactor	 1	 "Glutamine concentration"
+c_dGG       C    "g/L"           "conc."	 reactor	 1	 "Dipeptide concentration"
+c_NH4       C    "g/L"           "conc."	 reactor	 1	 "Ammonia concentration"
+Prod        C    "g/L"           "conc."     reactor     1   "Product concentration"
+VL          V	 "L"             "vol."      reactor	 1	 "Liquid Volume"
+
+
+INPUTS
+Ffeed          V   "L/h"   "feed rate"   "step1(t, 0, 24,     0.03237143/24*0.2)"
+Fglcbolus      V   "L/h"   "feed rate"   "step2(t, 0, 142.79, 0.00110274, 143.79, 0)+ step2(t, 0, 190.20, 0.00173867, 191.20, 0)"
+Fglnbolus      V   "L/h"   "feed rate"   "step2(t, 0, 69.84,  0.002231419, 70.84,  0)"  
+ 
+
+ODES
+
+ "- VCC*((Y_bmglc*(m_glc - abs(m_glc - (c_glc*nu_lacglc*q_glcm)/((c_glc + k_glc)*(nu_lacglc + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln))))) + (c_glc*nu_lacglc*nu_lacprod*q_glcm)/((c_glc + k_glc)*(nu_lacglc + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln))))*(nu_lacprod + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln)))))) - (c_glc*nu_lacglc*q_glcm)/((c_glc + k_glc)*(nu_lacglc + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln))))) + (c_glc*nu_lacglc*nu_lacprod*q_glcm)/((c_glc + k_glc)*(nu_lacglc + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln))))*(nu_lacprod + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln)))))))/2 - (Y_bmgln*c_gln*q_glnm)/(c_gln + k_gln)) - (VCC*(Ffeed + Fglcbolus + Fglnbolus))/VL - (VCC*k_mu*kdm)/(k_mu - (Y_bmglc*(m_glc - abs(m_glc - (c_glc*nu_lacglc*q_glcm)/((c_glc + k_glc)*(nu_lacglc + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln))))) + (c_glc*nu_lacglc*nu_lacprod*q_glcm)/((c_glc + k_glc)*(nu_lacglc + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln))))*(nu_lacprod + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln)))))) - (c_glc*nu_lacglc*q_glcm)/((c_glc + k_glc)*(nu_lacglc + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln))))) + (c_glc*nu_lacglc*nu_lacprod*q_glcm)/((c_glc + k_glc)*(nu_lacglc + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln))))*(nu_lacprod + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln)))))))/2 + (Y_bmgln*c_gln*q_glnm)/(c_gln + k_gln))"
+ "(VCC*k_mu*kdm)/(k_mu - (Y_bmglc*(m_glc - abs(m_glc - (c_glc*nu_lacglc*q_glcm)/((c_glc + k_glc)*(nu_lacglc + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln))))) + (c_glc*nu_lacglc*nu_lacprod*q_glcm)/((c_glc + k_glc)*(nu_lacglc + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln))))*(nu_lacprod + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln)))))) - (c_glc*nu_lacglc*q_glcm)/((c_glc + k_glc)*(nu_lacglc + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln))))) + (c_glc*nu_lacglc*nu_lacprod*q_glcm)/((c_glc + k_glc)*(nu_lacglc + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln))))*(nu_lacprod + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln)))))))/2 + (Y_bmgln*c_gln*q_glnm)/(c_gln + k_gln)) - (DCC*(Ffeed + Fglcbolus + Fglnbolus))/VL - DCC*k_lys"
+ "DCC*k_lys - (LCC*(Ffeed + Fglcbolus + Fglnbolus))/VL"
+ "(Ffeed*c_glcfeed)/VL - (c_glc*(Ffeed + Fglcbolus + Fglnbolus))/VL + (Fglcbolus*c_glcbolus)/VL - (VCC*c_glc*nu_lacglc*q_glcm)/((c_glc + k_glc)*(nu_lacglc + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln)))))"
+ "- VCC*((c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln))) - (Y_lacglc*c_glc*nu_lacglc*nu_lacprod*q_glcm)/((c_glc + k_glc)*(nu_lacglc + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln))))*(nu_lacprod + (c_lac*nu_lacgln*q_lacm)/((c_lac + k_lac)*(nu_lacgln + (c_gln*q_glnm)/(c_gln + k_gln)))))) - (c_lac*(Ffeed + Fglcbolus + Fglnbolus))/VL"
+ "Y_glnGG*c_dGG*r_dGG - c_gln*r_NH4gln - (c_gln*(Ffeed + Fglcbolus + Fglnbolus))/VL + (Fglnbolus*c_glnbolus)/VL - (VCC*c_gln*q_glnm)/(c_gln + k_gln)"
+ "- c_dGG*r_dGG - (c_dGG*(Ffeed + Fglcbolus + Fglnbolus))/VL"
+ "Y_NH4gln*c_gln*r_NH4gln - (c_NH4*(Ffeed + Fglcbolus + Fglnbolus))/VL + (VCC*Y_NH4gln*c_gln*q_glnm)/(c_gln + k_gln)"
+ "VCC*q_p - (Prod*(Ffeed + Fglcbolus + Fglnbolus))/VL"
+ "Ffeed + Fglcbolus + Fglnbolus"
+
+DERIVED
+
+OBSERVABLES
+VCCm         C	 "10^9 cells/L"	 "conc."	 0  0   "VCC"
+DCCm         C	 "10^9 cells/L"	 "conc."	 0  0   "DCC"
+c_glcm       C	 "g/L"           "conc."	 0  0   "c_glc"
+c_lacm       C	 "g/L"           "conc."	 0  0   "c_lac"
+c_glnm       C   "g/L"           "conc."     0  0   "c_gln"
+c_NH4m       C   "g/L"           "conc."     0  0   "c_NH4"                         
+Prodm        C   "g/L"           "conc."     0  0   "Prod"
+
+ERRORS
+VCCm   "std_VCC"
+DCCm   "std_DCC"
+c_glcm "std_cglc"
+c_lacm "std_clac"
+c_glnm "std_cgln"
+c_NH4m "std_cNH4"
+Prodm "std_Prod"
+
+CONDITIONS
